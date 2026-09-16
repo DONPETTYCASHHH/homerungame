@@ -94,29 +94,21 @@ const Phases = (() => {
             </div>
 
             <!-- Affordability Rating (v4: replaces DTI) -->
-            <div class="panel" style="background:var(--color-surface-2);padding:var(--space-3);margin-bottom:var(--space-4);border-left:3px solid ${affordability.color};">
+            <div class="panel" id="afford-panel" style="background:var(--color-surface-2);padding:var(--space-3);margin-bottom:var(--space-4);border-left:3px solid ${affordability.color};">
               <div class="row-between" style="margin-bottom:var(--space-1);">
                 <span class="heading-sm" style="text-transform:none;font-size:14px;">Affordability Rating</span>
-                <span class="value" style="color:${affordability.color};font-size:1rem;">${affordability.label}</span>
+                <span class="value" id="afford-label" style="color:${affordability.color};font-size:1rem;">${affordability.label}</span>
               </div>
               <div class="progress-bar" style="height:8px;margin-bottom:var(--space-2);">
-                <div class="progress-fill" style="width:${Math.min(100, (monthlyPayment / netSalary * 100) / 50 * 100)}%;background:${affordability.color};"></div>
+                <div class="progress-fill" id="afford-fill" style="width:${Math.min(100, (monthlyPayment / netSalary * 100) / 50 * 100)}%;background:${affordability.color};"></div>
               </div>
-              <p class="text-muted" style="font-size:13px;">
+              <p class="text-muted" id="afford-desc" style="font-size:13px;">
                 Est. bond payment: <strong>${fmt(monthlyPayment)}/mo</strong> 
                 (${(monthlyPayment / netSalary * 100).toFixed(0)}% of salary)
               </p>
             </div>
 
-            ${affordability.level === 'danger' ? `
-              <div class="warning-banner warning-red" style="margin-bottom:var(--space-4);">
-                ⚠️ Banks will likely decline this loan. Increase your salary or lower the property value.
-              </div>
-            ` : affordability.level === 'warning' ? `
-              <div class="warning-banner warning-red" style="margin-bottom:var(--space-4);">
-                ⚠️ This will be extremely tight. One bad event could sink you.
-              </div>
-            ` : ''}
+            <div id="afford-warning"></div>
 
             <button class="btn btn-primary btn-lg btn-block" id="btn-begin">Begin the Journey</button>
             <p class="disclaimer-note" style="margin-top:var(--space-3);">
@@ -126,22 +118,49 @@ const Phases = (() => {
             </p>
           </div>
           <div class="powered-by-footer">
-            Engineered by <a href="https://www.bankerx.org/" target="_blank" rel="noopener">BANKERX</a> <span class="text-faint">· v10</span>
+            Engineered by <a href="https://www.bankerx.org/" target="_blank" rel="noopener">BANKERX</a> <span class="text-faint">· v11</span>
           </div>
         </div>
       `;
 
+      // v10.1: never re-render mid-drag — patch the numbers in place for buttery sliders
+      const $id = (id) => container.querySelector('#' + id);
+      function updateCalcs() {
+        const affordability = getAffordability();
+        const bondAmount = targetProperty * 0.9;
+        const monthlyPayment = Engine.calcMonthlyPayment(bondAmount, SA.PRIME_RATE, 20);
+        const pct = monthlyPayment / netSalary * 100;
+        $id('salary-display').textContent = fmt(netSalary);
+        $id('savings-display').textContent = fmt(netSalary * 1);
+        $id('property-display').textContent = fmt(targetProperty);
+        $id('prime-display').textContent = SA.PRIME_RATE.toFixed(2) + '%';
+        $id('afford-panel').style.borderLeftColor = affordability.color;
+        const lbl = $id('afford-label');
+        lbl.textContent = affordability.label;
+        lbl.style.color = affordability.color;
+        const fill = $id('afford-fill');
+        fill.style.width = Math.min(100, pct / 50 * 100) + '%';
+        fill.style.background = affordability.color;
+        $id('afford-desc').innerHTML = `Est. bond payment: <strong>${fmt(monthlyPayment)}/mo</strong> (${pct.toFixed(0)}% of salary)`;
+        $id('afford-warning').innerHTML = affordability.level === 'danger' ? `
+          <div class="warning-banner warning-red" style="margin-bottom:var(--space-4);">
+            ⚠️ Banks will likely decline this loan. Increase your salary or lower the property value.
+          </div>` : affordability.level === 'warning' ? `
+          <div class="warning-banner warning-red" style="margin-bottom:var(--space-4);">
+            ⚠️ This will be extremely tight. One bad event could sink you.
+          </div>` : '';
+      }
       container.querySelector('#salary-slider').addEventListener('input', (e) => {
         netSalary = parseInt(e.target.value);
-        render();
+        updateCalcs();
       });
       container.querySelector('#property-slider').addEventListener('input', (e) => {
         targetProperty = parseInt(e.target.value);
-        render();
+        updateCalcs();
       });
       container.querySelector('#prime-slider').addEventListener('input', (e) => {
         SA.setPrimeRate(parseFloat(e.target.value));
-        render();
+        updateCalcs();
       });
       container.querySelector('#btn-begin').addEventListener('click', () => {
         Sound.play('click');

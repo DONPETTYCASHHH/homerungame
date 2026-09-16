@@ -114,9 +114,9 @@ body {
 .heading-sm { font-family: var(--font-display); font-style: italic; font-weight: 500; font-size: 0.85rem; color: var(--color-text-muted); }
 
 .label { font-family: var(--font-display); font-style: italic; font-size: 13px; color: var(--color-text-muted); font-weight: 400; }
-.value { font-family: var(--font-mono); font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums lining-nums; }
-.value-lg { font-family: var(--font-mono); font-size: 1.4rem; font-weight: 600; font-variant-numeric: tabular-nums lining-nums; }
-.value-xl { font-family: var(--font-mono); font-size: clamp(1.7rem, 1.1rem + 2vw, 2.4rem); font-weight: 600; font-variant-numeric: tabular-nums lining-nums; }
+.value { font-family: var(--font-mono); font-size: 14px; font-weight: 600; font-variant-numeric: tabular-nums lining-nums; white-space: nowrap; }
+.value-lg { font-family: var(--font-mono); font-size: clamp(1.1rem, 0.9rem + 1vw, 1.4rem); font-weight: 600; font-variant-numeric: tabular-nums lining-nums; white-space: nowrap; }
+.value-xl { font-family: var(--font-mono); font-size: clamp(1.7rem, 1.1rem + 2vw, 2.4rem); font-weight: 600; font-variant-numeric: tabular-nums lining-nums; white-space: nowrap; }
 
 .text-green { color: var(--color-primary); }
 .text-red { color: var(--color-danger); }
@@ -557,7 +557,8 @@ body {
 
 /* Slider group */
 .slider-group { display: flex; flex-direction: column; gap: var(--space-1); }
-.slider-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 2px; }
+.slider-header { display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-3); margin-bottom: 2px; }
+.slider-header .label, .row-between .label { min-width: 0; }
 
 /* Scrollbar */
 ::-webkit-scrollbar { width: 6px; }

@@ -940,7 +940,7 @@ const UI = (() => {
         </div>
         ${renderDisclaimer()}
         <div class="powered-by-footer">
-          Engineered by <a href="https://www.bankerx.org/" target="_blank" rel="noopener">BANKERX</a> <span class="text-faint">· v10</span>
+          Engineered by <a href="https://www.bankerx.org/" target="_blank" rel="noopener">BANKERX</a> <span class="text-faint">· v11</span>
         </div>
       </div>
     `;
@@ -1011,7 +1011,7 @@ const UI = (() => {
         </div>
         ${renderDisclaimer()}
         <div class="powered-by-footer">
-          Engineered by <a href="https://www.bankerx.org/" target="_blank" rel="noopener">BANKERX</a> <span class="text-faint">· v10</span>
+          Engineered by <a href="https://www.bankerx.org/" target="_blank" rel="noopener">BANKERX</a> <span class="text-faint">· v11</span>
         </div>
       </div>
     `;

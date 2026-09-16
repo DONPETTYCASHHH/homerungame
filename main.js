@@ -1,12 +1,12 @@
 /* ============================================
-   HOME RUN v10 — Main Game Loop
+   HOME RUN v11 — Main Game Loop
    Year-end reveal, cash banking, bond extensions,
    decision toggle, investments, drowning popup
    ============================================ */
 
 (function () {
-  const GAME_VERSION = 'v10';
-  const SAVE_KEY = 'homerun_save_v10';
+  const GAME_VERSION = 'v11';
+  const SAVE_KEY = 'homerun_save_v11';
   let state = null;
   let setupCtx = {};
 
